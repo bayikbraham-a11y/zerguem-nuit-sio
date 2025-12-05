@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zerguèm de la nuit - Lasergame</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Écran d'accueil -->
+        <div id="home-screen" class="screen">
+            <div class="title-container">
+                <h1><i class="fas fa-crosshairs"></i> ZERGUÈM DE LA NUIT</h1>
+                <h2>Lasergame en ligne</h2>
+                <div class="laser-line"></div>
+                <p class="subtitle">Transformez votre souris en pistolet laser et tirez sur les ennemis!</p>
+            </div>
+
+            <!-- Configuration des joueurs -->
+            <div class="setup-panel">
+                <div class="panel-header">
+                    <i class="fas fa-users"></i>
+                    <h3>Configuration des joueurs</h3>
+                </div>
+                
+                <div class="player-count">
+                    <label for="player-count">Nombre de joueurs:</label>
+                    <div class="count-control">
+                        <button id="decrease-count" class="count-btn"><i class="fas fa-minus"></i></button>
+                        <input type="number" id="player-count" min="1" max="10" value="2">
+                        <button id="increase-count" class="count-btn"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <div id="player-names-container">
+                    <!-- Les champs de noms seront ajoutés dynamiquement ici -->
+                </div>
+
+                <div class="instructions">
+                    <h4><i class="fas fa-info-circle"></i> Instructions</h4>
+                    <ul>
+                        <li>Cliquez pour tirer sur les ennemis (vaisseaux)</li>
+                        <li>Les ennemis évoluent toutes les 15 secondes</li>
+                        <li>Le jeu dure 45 secondes par joueur</li>
+                        <li>Chaque joueur joue à tour de rôle</li>
+                        <li>Marquez un maximum de points!</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="start-game" class="btn-primary">
+                        <i class="fas fa-play"></i> Démarrer la partie
+                    </button>
+                    <button id="show-help" class="btn-secondary">
+                        <i class="fas fa-question-circle"></i> Aide
+                    </button>
+                </div>
+            </div>
+
+            <div class="credits">
+                <p>Défi "Zerguèm de la nuit" - Nuit du SIO - Thème: Gamification</p>
+                <p class="prize">Lot: Jusqu'à 10 places de lasergame dans les centres partenaires</p>
+            </div>
+        </div>
+
+        <!-- Écran de jeu -->
+        <div id="game-screen" class="screen hidden">
+            <div class="game-header">
+                <div class="game-info">
+                    <div class="current-player">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span id="current-player-name">Joueur 1</span>
+                    </div>
+                    <div class="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="game-timer">45</span>s
+                    </div>
+                    <div class="score-display">
+                        <i class="fas fa-bullseye"></i>
+                        <span id="current-score">0</span> points
+                    </div>
+                </div>
+                
+                <div class="game-controls">
+                    <button id="pause-btn" class="btn-control">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button id="resume-btn" class="btn-control hidden">
+                        <i class="fas fa-play"></i> Reprendre
+                    </button>
+                    <button id="restart-btn" class="btn-control">
+                        <i class="fas fa-redo"></i> Recommencer
+                    </button>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <div id="game-canvas-container">
+                    <canvas id="game-canvas"></canvas>
+                    <div id="crosshair"></div>
+                    <div id="laser-sight"></div>
+                </div>
+                
+                <!-- Message d'évolution des ennemis -->
+                <div id="enemy-evolution" class="evolution-message hidden">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="evolution-text">Les ennemis évoluent!</span>
+                </div>
+            </div>
+
+            <div class="game-phase-indicator">
+                <div class="phase phase1 active">
+                    <span>Phase 1</span>
+                    <div class="phase-bar"></div>
+                    <p>Ennemis lents</p>
+                </div>
+                <div class="phase phase2">
+                    <span>Phase 2</span>
+                    <div class="phase-bar"></div>
+                    <p>Vitesse augmentée</p>
+                </div>
+                <div class="phase phase3">
+                    <span>Phase 3</span>
+                    <div class="phase-bar"></div>
+                    <p>Deux ennemis à la fois</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran de transition entre joueurs -->
+        <div id="transition-screen" class="screen hidden">
+            <div class="transition-content">
+                <h2><i class="fas fa-exchange-alt"></i> Changement de joueur</h2>
+                <div class="next-player">
+                    <p>Préparez-vous,</p>
+                    <h3 id="next-player-name">Joueur 2</h3>
+                    <p>à vous de jouer!</p>
+                </div>
+                <div class="countdown">
+                    <div class="countdown-number">5</div>
+                    <p>secondes</p>
+                </div>
+                <div class="transition-instructions">
+                    <p><i class="fas fa-mouse-pointer"></i> Utilisez votre souris pour viser et cliquez pour tirer</p>
+                    <p><i class="fas fa-bullseye"></i> Les cibles rouges rapportent plus de points</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran des scores -->
+        <div id="score-screen" class="screen hidden">
+            <div class="score-header">
+                <h1><i class="fas fa-trophy"></i> Résultats de la partie</h1>
+                <div class="laser-line"></div>
+            </div>
+
+            <div class="score-container">
+                <table id="score-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-medal"></i> Classement</th>
+                            <th><i class="fas fa-user"></i> Joueur</th>
+                            <th><i class="fas fa-bullseye"></i> Score</th>
+                            <th><i class="fas fa-crosshairs"></i> Précision</th>
+                        </tr>
+                    </thead>
+                    <tbody id="score-table-body">
+                        <!-- Les scores seront ajoutés dynamiquement ici -->
+                    </tbody>
+                </table>
+
+                <div class="score-actions">
+                    <button id="play-again-btn" class="btn-primary">
+                        <i class="fas fa-redo"></i> Rejouer
+                    </button>
+                    <button id="back-home-btn" class="btn-secondary">
+                        <i class="fas fa-home"></i> Accueil
+                    </button>
+                </div>
+            </div>
+
+            <div class="winner-container hidden" id="winner-container">
+                <div class="winner-crown">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h2>Champion</h2>
+                <div class="winner-name" id="winner-name">Joueur 1</div>
+                <div class="winner-score" id="winner-score">0 points</div>
+            </div>
+        </div>
+
+        <!-- Modal d'aide -->
+        <div id="help-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-question-circle"></i> Comment jouer</h2>
+                    <button id="close-help" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-section">
+                        <h3><i class="fas fa-gamepad"></i> Objectif du jeu</h3>
+                        <p>Transformez votre curseur en pistolet laser et tirez sur les ennemis (vaisseaux) qui apparaissent à l'écran. Marquez un maximum de points en 45 secondes.</p>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3><i class="fas fa-users"></i> Configuration</h3>
+                        <p>Avant de commencer, sélectionnez le nombre de joueurs (1 à 10) et entrez leurs noms. Chaque joueur jouera à tour de rôle.</p>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3><i class="fas fa-clock"></i> Phases de jeu</h3>
+                        <ul>
+                            <li><strong>Phase 1 (0-15s):</strong> Ennemis lents, 10 points par cible</li>
+                            <li><strong>Phase 2 (15-30s):</strong> Vitesse augmentée, 15 points par cible</li>
+                            <li><strong>Phase 3 (30-45s):</strong> Deux ennemis simultanés, 20 points par cible</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3><i class="fas fa-crosshairs"></i> Contrôles</h3>
+                        <ul>
+                            <li><strong>Curseur:</strong> Déplacez votre souris pour viser</li>
+                            <li><strong>Clic gauche:</strong> Tirer sur les ennemis</li>
+                            <li><strong>Bouton Pause:</strong> Mettre le jeu en pause</li>
+                            <li><strong>Bouton Reprendre:</strong> Continuer le jeu</li>
+                            <li><strong>Bouton Recommencer:</strong> Redémarrer la partie</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3><i class="fas fa-star"></i> Calcul des scores</h3>
+                        <p>Votre score final est calculé en fonction du nombre d'ennemis touchés et de votre précision. Les tirs réussis en phase 3 rapportent plus de points.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="laser-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-laser-gun-shot-1678.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="explosion-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-explosion-with-debris-1993.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="phase-change-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-interface-902.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
