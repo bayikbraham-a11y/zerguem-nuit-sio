@@ -1,8 +1,3 @@
-Bonjour,
-
-Je vous soumets notre projet pour le défi "Zerguèm de la nuit".
-
-Lien du jeu : [https://bayikbraham-a11y.github.io/zerguem-nuit-sio/]
 
 Procédure pour activer la partie :
 1. Ouvrir le lien ci-dessus
@@ -22,6 +17,3 @@ Fonctionnalités implémentées :
 - Écran de transition entre joueurs
 - Tableau des scores final
 - Design responsive et effets visuels
-
-Cordialement,
-Ace team
